@@ -1,4 +1,5 @@
 import Text.Nagato.Models
+import Text.Nagato.Query.IO
 import Text.Nagato.Query.Trigram
 import Text.Nagato.Query.Morphologic
 import Text.Nagato.Query.Answer
@@ -13,14 +14,22 @@ doTrainTrigram sentence = do
 
 main :: IO()
 main = do
-  loaded <- parseCSVFromFile "setting.csv"
-  print loaded
+  eitherLoaded <- parseCSVFromFile "setting.csv"
+  case eitherLoaded of
+    Left _ -> error "hoge"
+    Right loaded -> do
+      let (sentences, answers) = unzip $ map splitSetting loaded
+      trained <- mapM doTrainTrigram $ sentences
+      let model = zip answers trained
+      writeModel "model.bin" model
 
-splitSetting :: [String] -> (String, Answer)
+splitSetting :: [Field] -> (String, Answer)
 splitSetting setting = (settingName setting, settingAnswer setting)
 
-settingName :: [String] -> String
+settingName :: [Field] -> String
 settingName = head
 
-settingAnswer :: [String] -> [Int]
+settingAnswer :: [Field] -> [Int]
 settingAnswer = (map read) . tail
+
+
