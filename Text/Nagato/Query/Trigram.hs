@@ -1,6 +1,7 @@
 module Text.Nagato.Query.Trigram
 ( Trigram
 , trainTrigram
+, makeTrigramList
 )where
 
 import Text.Nagato.Models

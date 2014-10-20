@@ -2,7 +2,7 @@ module Text.Nagato.Query.Morphologic
 (parseParts 
 )where
 
-import Text.MeCab
+import Text.MeCab()
 import Text.Nagato.MeCabTools 
 
 parseParts :: String -> IO [String]
