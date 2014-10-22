@@ -1,2 +1,2 @@
 module Text.Nagato.Query.Answer where
-type Answer = [Int]
+type Answer = [(Int, String)]
