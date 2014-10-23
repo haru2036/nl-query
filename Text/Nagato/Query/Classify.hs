@@ -4,12 +4,17 @@ module Text.Nagato.Query.Classify
 where
 import Text.Nagato.MeCabTools()
 import Data.List
+import Data.Maybe
 
 tune :: [String] -> Int -> String -> Int  
-tune parts pos part = nearest pos (elemIndices part parts)
+tune parts pos part 
+  | parts !! pos == part = pos 
+  | otherwise = nearest pos (elemIndices part parts)
 
-near :: Int -> [Int] -> [Int]
+-- Returns distance for idx
+near :: Int -> [Int] -> [Int]  
 near pos indices = map (abs . subtract pos) indices
 
 nearest :: Int -> [Int] -> Int
-nearest pos indices = indices !! ((minimum (near pos indices))) 
+nearest pos indices = indices !! (fromJust (elemIndex (minimum (near pos indices)) (near pos indices)))
+
